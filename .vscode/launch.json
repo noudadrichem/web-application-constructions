@@ -1,0 +1,69 @@
+{
+  "configurations": [
+    {
+      "type": "java",
+      "name": "CodeLens (Launch) - Server",
+      "request": "launch",
+      "mainClass": "les1.prakticum5.Server",
+      "projectName": "formatief_21caf7e5"
+    },
+    {
+      "type": "java",
+      "name": "CodeLens (Launch) - Server",
+      "request": "launch",
+      "mainClass": "les1.prakticum4.Server",
+      "projectName": "formatief_21caf7e5"
+    },
+    {
+      "type": "java",
+      "name": "CodeLens (Launch) - Client",
+      "request": "launch",
+      "mainClass": "les1.prakticum3.Client",
+      "projectName": "formatief_21caf7e5"
+    },
+    {
+      "type": "java",
+      "name": "CodeLens (Launch) - Server",
+      "request": "launch",
+      "mainClass": "les1.prakticum3.Server",
+      "projectName": "formatief_21caf7e5"
+    },
+    {
+      "type": "java",
+      "name": "CodeLens (Launch) - Server",
+      "request": "launch",
+      "mainClass": "les1.prakticum2.Server",
+      "projectName": "formatief_21caf7e5"
+    },
+    {
+      "type": "java",
+      "name": "CodeLens (Launch) - Client",
+      "request": "launch",
+      "mainClass": "les1.prakticum2.Client",
+      "projectName": "formatief_21caf7e5"
+    },
+    {
+      "type": "java",
+      "name": "CodeLens (Launch) - Client",
+      "request": "launch",
+      "mainClass": "les1.prakticum1.Client",
+      "projectName": "formatief_21caf7e5"
+    },
+    {
+      "type": "java",
+      "name": "CodeLens (Launch) - Server",
+      "request": "launch",
+      "mainClass": "Server",
+      "projectName": "formatief_21caf7e5",
+      "console": "externalTerminal"
+    },
+    {
+      "type": "java",
+      "name": "CodeLens (Launch) - Client",
+      "request": "launch",
+      "mainClass": "Client",
+      "projectName": "formatief_21caf7e5",
+      "console": "externalTerminal"
+    }
+  ]
+}
