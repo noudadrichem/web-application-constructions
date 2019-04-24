@@ -11,14 +11,11 @@ public class Server {
         Socket s = ss.accept();
         System.out.println("New connection from " + s.getInetAddress());
 
-        MyServlet thread1 = new MyServlet(s);
-        // MyServlet thread2 = new MyServlet(s);
-        thread1.start();
-        // thread2.start();
-        
-        // while(s.isConnected()) {
-        // }
-
+        while(s.isConnected()) {
+            MyServlet thread1 = new MyServlet(s);
+            thread1.start();
+            
+        }
         
         ss.close();
 
