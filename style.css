@@ -1,0 +1,124 @@
+:root {
+  --text-color-primary: #9b9b9b;
+  --text-color-secondary: #3B3B3B;
+  --white: #fbfbfd;
+  --white-second: #f3f3f3;
+  --strong-white: #fff;
+  --blanko-blue: #007aff;
+  --box-shadow: 0 5px 10px 0 #eeeef3;
+}
+
+[data-theme="dark"] {
+  --text-color-primary: #fff;
+  --text-color-secondary: #fff;
+  --white: #232323;
+  --white-second: #333333;
+  --strong-white: #424242;
+  --blanko-blue: #007aff;
+  --box-shadow: 0 5px 10px 0 #333333;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'IBM Plex Sans', 'Open Sans', sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; 
+  background: var(--white);
+}
+
+.container {
+  width: 260px;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  background: lightblue;
+  padding: 12px;
+  background: var(--strong-white);
+  box-shadow: var(--box-shadow);
+  border-radius: 8px;
+  transition: .2s;
+  animation-duration: 800ms;
+  animation-name: fadeInUp;
+}
+
+.container .display-container {
+  display: flex;
+}
+
+.container .display {
+  display: inline-flex;
+  flex: 2.5;
+  background-color: grey;
+  color: var(--text-color-primary);
+  height: 32px;
+  margin-bottom: 16px;
+  background-color: var(--white-second);
+  padding: 8px;
+  align-items: center;
+}
+
+.container .display.answer {
+  flex: 1;
+  margin-left: 8px;
+}
+
+.container .row {
+  display: inline-flex;
+  margin-bottom: 8px;
+}
+
+.container .row:last-child {
+  margin-bottom: 0;
+}
+
+.container .row .btn {
+  border: 0;
+  margin-right: 8px;
+  padding: 16px;
+  display: flex;
+  color: var(--text-color-secondary);
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  border-radius: 4px;
+  background: var(--white-second);
+  font-weight: 700;
+}
+
+.container .row .btn.is {
+  background: var(--blanko-blue);
+  color: var(--strong-white);
+}
+
+.container .row .btn.active-operator {
+  background: grey;
+}
+
+.container .row .btn:last-child {
+  margin-right: 0;
+}
+
+.dark-toggle {
+  position: fixed;
+  top: 32px;
+  left: 32px;
+  color: var(--text-color-primary);
+}
+
+@keyframes fadeInUp {
+  from {
+    transform: translateY(30%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0%);
+    opacity: 1;
+  }
+}
