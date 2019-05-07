@@ -3,9 +3,7 @@
 // const WEATHER_API_KEY = '3d0ff603d5b7991d41b50c4095e798b8'
 const WEATHER_API_KEY = '00fb0158113e4b223c8064f484b43ac2' // test key van de website werkt wel.
 
-function el(node) {
-  return document.querySelector(node)
-}
+const el = node => document.querySelector(node)
 
 function secondsToHourMinuteSecond(totalSeconds) {
   const hour = Math.floor(totalSeconds / 3600)
@@ -56,6 +54,9 @@ function showWeather(lat, long, city) {
         zonsondergang: getTimePlusZone(data.sys.sunset),
       }
 
+      const imgTag = `<img src='https://openweathermap.org/img/w/${data.weather[0].icon}.png'/>`
+      document.querySelector(".weather-img").innerHTML = imgTag;
+
       Object.keys(renderData)
         .forEach((key) => {
           const value = renderData[key]
@@ -69,9 +70,12 @@ function showWeather(lat, long, city) {
 
 function insertLocationDataInDom(locationData) {
   const locationListNode = el('#my-location ul')
-  const { city, latitude, longitude } = locationData
+  const { city, latitude, longitude, country } = locationData
+  console.log({ locationData  })
   showWeather(latitude, longitude, city)
 
+  const flagNode = el('#flag')
+  flagNode.className = `flag-icon flag-icon-${country.toLowerCase()}`
 
   Object.keys(locationData)
     .forEach(key => {
@@ -89,21 +93,21 @@ function getCountryData() {
 }
 
 function renderCountryDataToDom(data) {
-  console.log(data)
-  const countryContainer = el('#country-list ul')
+  const countryContainer = el('#country-list table')
 
   console.log({countryContainer})
 
   data
     .forEach(country => {
+      const { name, capital, region, surface, population } = country
       countryContainer.innerHTML += `
-        <li>
-          <span>${country.name}</span>
-          <span>${country.capital}</span>
-          <span>${country.region}</span>
-          <span>${country.surface}</span>
-          <span>${country.population}</span>
-        </li>
+        <tr>
+          <td>${name}</td>
+          <td>${capital}</td>
+          <td>${region}</td>
+          <td>${surface}</td>
+          <td>${population}</td>
+        </tr>
       `
     })
 
@@ -117,8 +121,6 @@ function initLocationApi() {
 }
 
 window.addEventListener('load', function() {
-  console.log('load')
-  console.log('hoi')
   initLocationApi()
   getCountryData()
 })
