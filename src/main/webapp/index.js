@@ -80,9 +80,10 @@ function insertLocationDataInDom(locationData) {
   Object.keys(locationData)
     .forEach(key => {
       const value = locationData[key]
+
       locationListNode.innerHTML += `
         <li>${key.replace(/_/g, ' ')}: <span>${value}</span></li>
-        `
+      `
     })
 }
 
