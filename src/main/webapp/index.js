@@ -27,6 +27,34 @@ function getTimePlusZone(timestamp) {
   return hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2)
 }
 
+function fetchWeatherData(lat, long, city) {
+	const now = new Date().getTime();
+	const isThereInStorage = window.localStorage.getItem(`weather-${city}`)
+	
+	return new Promise((res) => {
+		if(isThereInStorage) {
+			const { updated, weatherData } = JSON.parse(isThereInStorage)
+			const isItStillValid = new Date(updated + (1 * 60000)) >= updated
+			console.log({ isItStillValid })
+			
+			res(weatherData)
+		} else {
+
+	    fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${long}&appid=${WEATHER_API_KEY}&units=metric`)
+		    .then(res => res.json())
+		    .then(weatherData => {
+	        window.localStorage.setItem(`weather-${city}`, JSON.stringify({ weatherData, updated: new Date().getTime() }))
+
+			    res(weatherData)
+		    })
+		    .catch(err => console.log({ err }))
+			
+		}	
+	})
+}	
+	
+	
+
 
 function showWeather(lat, long, city) {
   const huidigeStadNode = el('#huidige-stad')
@@ -34,8 +62,7 @@ function showWeather(lat, long, city) {
   const weatherContainerNode = el('#weather-info ul')
   weatherContainerNode.innerHTML = ''
 
-  fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${long}&appid=${WEATHER_API_KEY}&units=metric`)
-    .then(res => res.json())
+  fetchWeatherData(lat, long, city)
     .then(data => {
       const renderData = {
         luchtvochtigheid: data.main.humidity,
@@ -122,4 +149,6 @@ function initLocationApi() {
 window.addEventListener('load', function() {
   initLocationApi()
   getCountryData()
+  console.log('ja toch niet dan')
+
 })
