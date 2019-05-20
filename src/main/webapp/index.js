@@ -1,7 +1,6 @@
 'use strict'
 
-// const WEATHER_API_KEY = '3d0ff603d5b7991d41b50c4095e798b8'
-const WEATHER_API_KEY = '00fb0158113e4b223c8064f484b43ac2' // test key van de website werkt wel.
+const WEATHER_API_KEY = '3d0ff603d5b7991d41b50c4095e798b8'
 
 const el = node => document.querySelector(node)
 
@@ -13,17 +12,10 @@ function secondsToHourMinuteSecond(totalSeconds) {
   return `${('0' + hour).slice(-2)}:${('0' + minute).slice(-2)}:${('0' + seconds).slice(-2)}`
 }
 
-function getWindrichting(richtingDeg) {
-  switch(true) {
-    case (richtingDeg > 305 && richtingDeg < 45):
-      return 'noord'
-    case (richtingDeg > 45 && richtingDeg < 135):
-      return 'oost'
-    case (richtingDeg > 135 && richtingDeg < 270):
-      return 'zuid'
-    case (richtingDeg > 270 && richtingDeg < 305):
-      return 'west'
-  }
+function getWindrichting(num) {
+	const val =  Math.floor((num / 45) + 0.5);
+	const arr = ["N","NE","E", "SE","S","SW","W","NW"];
+	return arr[(val % 8)]
 }
 
 function getTimePlusZone(timestamp) {
@@ -37,10 +29,10 @@ function getTimePlusZone(timestamp) {
 
 
 function showWeather(lat, long, city) {
-  console.log('show weather', lat, long, city)
   const huidigeStadNode = el('#huidige-stad')
   huidigeStadNode.innerText = city || 'geen stad gevonden'
   const weatherContainerNode = el('#weather-info ul')
+  weatherContainerNode.innerHTML = ''
 
   fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${long}&appid=${WEATHER_API_KEY}&units=metric`)
     .then(res => res.json())
@@ -60,7 +52,6 @@ function showWeather(lat, long, city) {
       Object.keys(renderData)
         .forEach((key) => {
           const value = renderData[key]
-
           weatherContainerNode.innerHTML += `
             <li>${key} : <span>${value}</span></li>
           `
@@ -71,7 +62,6 @@ function showWeather(lat, long, city) {
 function insertLocationDataInDom(locationData) {
   const locationListNode = el('#my-location ul')
   const { city, latitude, longitude, country } = locationData
-  console.log({ locationData  })
   showWeather(latitude, longitude, city)
 
   const flagNode = el('#flag')
@@ -88,7 +78,7 @@ function insertLocationDataInDom(locationData) {
 }
 
 function getCountryData() {
-  fetch('http://localhost:8080/calcu/restservices/countries/')
+  fetch('http://localhost:8080/webservices/restservices/countries/')
     .then(res => res.json())
     .then(renderCountryDataToDom)
 }
@@ -96,14 +86,13 @@ function getCountryData() {
 function renderCountryDataToDom(data) {
   const countryContainer = el('#country-list table')
 
-  console.log({countryContainer})
-
   data
+  	.sort()
     .forEach(country => {
-      const { name, capital, region, surface, population } = country
+      const { name, capital, region, surface, population, lat, lng} = country
       countryContainer.innerHTML += `
         <tr>
-          <td>${name}</td>
+          <td class="land" data-lat="${lat}" data-lon="${lng}" data-city="${capital}">${name}</td>
           <td>${capital}</td>
           <td>${region}</td>
           <td>${surface}</td>
@@ -111,6 +100,15 @@ function renderCountryDataToDom(data) {
         </tr>
       `
     })
+    
+    document.querySelectorAll('.land')
+    	.forEach(btn => {
+    		btn.addEventListener('click', e => {
+    			e.stopPropagation();
+    			const { lat, lon, city } = e.target.dataset
+    			showWeather(lat, lon, city)
+    		})
+    	})
 
 }
 
