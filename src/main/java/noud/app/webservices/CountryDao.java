@@ -1,5 +1,6 @@
 package noud.app.webservices;
 
+import java.sql.SQLException;
 import java.util.*;
 
 public interface CountryDao {
@@ -9,5 +10,5 @@ public interface CountryDao {
 	public List<Country> find10LargestPopulations();
 	public List<Country> fidn10LargestSurfaces();
 	public boolean update(Country country);
-	public boolean delete(Country country);
+	public boolean delete(String code);
 }

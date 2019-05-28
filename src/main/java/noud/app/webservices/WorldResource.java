@@ -1,11 +1,10 @@
 package noud.app.webservices;
 
 import javax.json.*;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.servlet.http.HttpServlet.*;
  
 
 @Path("/countries")
@@ -49,7 +48,7 @@ public class WorldResource extends CountryPostgresDaoImpl {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("{countryCode}")
 	public String getSingleCountry(@PathParam("countryCode") String countryCode) {
-		Country country = resource.getCountryByCode(countryCode);
+		Country country = super.findByCode(countryCode.toUpperCase());
 		
 		return buildCountryJsonObject(country).build().toString();
 	}
@@ -81,6 +80,45 @@ public class WorldResource extends CountryPostgresDaoImpl {
 		
 		return countriesArray.build().toString();
 	}
+	
+	@DELETE
+	@Path("/delete/{code}")
+	public String deleteCountryByCode(@PathParam("code") String code) {
+		super.delete(code);
+		
+		JsonObjectBuilder messageBuilder = Json.createObjectBuilder();
+		messageBuilder
+			.add("message", "succesfully delete country: " + code);
+		
+		return messageBuilder.build().toString();
+	}
+	
+	
+//	@PUT
+//	@Path("/update/{code}")
+//	public Response update(
+//			@PathParam("code") String code, 
+//			@FormParam("name") String naam, 
+//			@FormParam("capital") String hoofdstad, 
+//			@FormParam("surface") int oppervlakte, 
+//			@FormParam("population") int mensen) {
+//
+//		Country c = new Country(); 
+//		c.setCode(code);
+//		c.setName(naam);
+//		c.setCapital(hoofdstad);
+//		c.setPopulation(mensen);
+//		c.setSurface(oppervlakte);
+//		boolean r = db.update(c);
+//		
+//		super.update(c)
+//		
+//		if (!r) {
+//			return Response.status(404).build();
+//		}
+//		
+//		return Response.ok().build();
+//	}
 
 }
 
