@@ -9,7 +9,7 @@ import javax.ws.rs.core.MediaType;
  
 
 @Path("/countries")
-public class WorldResource {
+public class WorldResource extends CountryPostgresDaoImpl {
 	
 	private WorldService resource = new WorldService();
 	
@@ -32,13 +32,13 @@ public class WorldResource {
 		return singleCountry;
 		
 	}
-	
+
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public String getCountries() {
 		JsonArrayBuilder countriesArray = Json.createArrayBuilder();
 		
-		for(Country country : resource.getAllCountries()) {
+		for(Country country : super.findAll()) {
 			countriesArray.add(buildCountryJsonObject(country));
 		}
 		

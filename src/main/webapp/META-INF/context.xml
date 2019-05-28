@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Context>
-	<Resource name="kdbc/PostgresDS"
-		url="jdbc:postgresql://postgres:5432/p7"
-		driverClassName="org.postgresql.Driver"
-		auth="Container"
-		type="javax.sql.DataSource"
-		username="noud"
-		password="test1234" />
+    <Resource name="jdbc/PostgresDS"
+        url="jdbc:postgresql://localhost:5432/worlddb"
+        driverClassName="org.postgresql.Driver" 
+        auth="Container" 
+        type="javax.sql.DataSource"
+        username="postgres"
+        password="Hallo123" />
 </Context>

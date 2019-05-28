@@ -1,7 +1,7 @@
 package noud.app.webservices;
 
 import java.sql.*;
-import java.util.List;
+import java.util.*;
 
 public class CountryPostgresDaoImpl extends PostgresBaseDao implements CountryDao {
 
@@ -22,7 +22,36 @@ public class CountryPostgresDaoImpl extends PostgresBaseDao implements CountryDa
 
 	@Override
 	public List<Country> findAll() {
-		return null;
+			
+		ArrayList<Country> tempCountries = new ArrayList<Country>();
+		
+		try(Connection con = super.getConnection()) {
+			String query = "select * from country";
+			ResultSet r = con.prepareStatement(query).executeQuery();
+
+			while(r.next()) {
+				System.out.println();
+				tempCountries.add(new Country(
+					r.getString("code"),
+					r.getString("iso3"),
+					r.getString("name"),
+					r.getString("capital"),
+					r.getString("continent"),
+					r.getString("region"),
+					r.getDouble("surfacearea"),
+					r.getInt("population"),
+					r.getString("governmentform"),
+					r.getDouble("latitude"),
+					r.getDouble("longitude")
+				));
+			}
+			
+			return tempCountries;
+			
+		} catch(Exception e) {
+			System.out.print(e);
+			return tempCountries;
+		}		
 	}
 
 	@Override
