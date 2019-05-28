@@ -9,6 +9,6 @@ public interface CountryDao {
 	public Country findByCode(String code);
 	public List<Country> find10LargestPopulations();
 	public List<Country> fidn10LargestSurfaces();
-	public boolean update(Country country);
+	public boolean update(String code, String land, String hoofdstad, String regio, int oppervlakte, int inwoners);
 	public boolean delete(String code);
 }

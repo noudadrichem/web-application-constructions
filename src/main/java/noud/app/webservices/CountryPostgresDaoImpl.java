@@ -110,40 +110,28 @@ public class CountryPostgresDaoImpl extends PostgresBaseDao implements CountryDa
 			PreparedStatement prepState = con.prepareStatement("delete from country where code = ?");
 			prepState.setString(1, code);
 			prepState.executeQuery();
+
 			return true;
 		} catch(Exception e) {
 			System.out.print(e);
+
 			return false;
 		}
 	}
 
-//	@PUT
-//	@Path("{code}")
-//	public Response update(@PathParam("code") String code, @FormParam("name") String naam, @FormParam("capital") String hoofdstad,
-//			@FormParam("surface") int oppervlakte, @FormParam("population") int mensen) {
-//
-//		CountryPostgresDaoImpl db = new CountryPostgresDaoImpl();
-//		Country c = new Country(); 
-//		c.setCode(code);
-//		c.setName(naam);
-//		c.setCapital(hoofdstad);
-//		c.setPopulation(mensen);
-//		c.setSurface(oppervlakte);
-//		boolean r = db.update(c);
-//		
-//		if (!r) {
-//			return Response.status(404).build();
-//		}
-//		
-//		return Response.ok().build();
-//	}
-
 	@Override
-	public boolean update(Country country) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-	
-	
+	public boolean update(String code, String land, String hoofdstad, String regio, int oppervlakte, int inwoners) {
+		try (Connection con = super.getConnection()){
+			String query = "UPDATE country SET name='" + land + "', capital='"+hoofdstad+"', region='"+regio+"', surfacearea='"+oppervlakte+"', population='"+inwoners+"' ";
+			query += "WHERE code='"+ code + "'";
+			PreparedStatement pstmt = con.prepareStatement(query);
+			pstmt.executeUpdate();
 
+			return true;			
+		} catch (Exception e) {
+			System.out.print(e);
+
+			return false;
+		}
+	}
 }

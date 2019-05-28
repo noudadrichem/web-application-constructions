@@ -105,22 +105,19 @@ function insertLocationDataInDom(locationData) {
     })
 }
 
-function getCountryData() {
-  fetch('http://localhost:8080/webservices/restservices/countries/')
-    .then(res => res.json())
-    .then(renderCountryDataToDom)
-}
-
 function renderCountryDataToDom(data) {
   const countryContainer = el('#country-list table')
-
+  countryContainer.innerHTML = ''
   data
   	.sort()
     .forEach(country => {
-      const { name, capital, region, surface, population, lat, lng} = country
+      const { name, capital, region, surface, population, lat, lng, code } = country
       countryContainer.innerHTML += `
         <tr>
-          <td class="land" data-lat="${lat}" data-lon="${lng}" data-city="${capital}">${name}</td>
+          <td><button class="btn-remove-country" data-code="${code}">x</button></td>
+          <td class="land" data-lat="${lat}" data-lon="${lng}" data-city="${capital}">
+            ${name}
+          </td>
           <td>${capital}</td>
           <td>${region}</td>
           <td>${surface}</td>
@@ -128,16 +125,38 @@ function renderCountryDataToDom(data) {
         </tr>
       `
     })
-    
-    document.querySelectorAll('.land')
-    	.forEach(btn => {
-    		btn.addEventListener('click', e => {
-    			e.stopPropagation();
-    			const { lat, lon, city } = e.target.dataset
-    			showWeather(lat, lon, city)
-    		})
-    	})
 
+    return data
+}
+
+function getCountryData() {
+  fetch('http://localhost:9090/webapp/restservices/countries/')
+    .then(res => res.json())
+    .then(data => {
+      renderCountryDataToDom(data)
+      return data
+    })
+    .then(data => {
+      document.querySelectorAll('.land')
+        .forEach(btn => {
+          btn.addEventListener('click', e => {
+            const { lat, lon, city } = e.target.dataset
+            showWeather(lat, lon, city)
+          })
+        })
+        
+      document.querySelectorAll('.btn-remove-country')
+        .forEach(btn => {
+          btn.addEventListener('click', e => {
+            fetch(`http://localhost:9090/webapp/restservices/countries/delete/${e.target.dataset.code}`, { method: 'DELETE' })
+              .then(stream => stream.json())
+              .then(response => {
+                console.log({ response })
+                getCountryData(data)
+              })
+          })
+        })
+    })
 }
 
 function initLocationApi() {

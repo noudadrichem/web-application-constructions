@@ -94,32 +94,23 @@ public class WorldResource extends CountryPostgresDaoImpl {
 	}
 	
 	
-//	@PUT
-//	@Path("/update/{code}")
-//	public Response update(
-//			@PathParam("code") String code, 
-//			@FormParam("name") String naam, 
-//			@FormParam("capital") String hoofdstad, 
-//			@FormParam("surface") int oppervlakte, 
-//			@FormParam("population") int mensen) {
-//
-//		Country c = new Country(); 
-//		c.setCode(code);
-//		c.setName(naam);
-//		c.setCapital(hoofdstad);
-//		c.setPopulation(mensen);
-//		c.setSurface(oppervlakte);
-//		boolean r = db.update(c);
-//		
-//		super.update(c)
-//		
-//		if (!r) {
-//			return Response.status(404).build();
-//		}
-//		
-//		return Response.ok().build();
-//	}
+	@PUT
+	@Path("/update/{code}")
+	@Produces("application/json")
+	public Response updateCountry(
+		@PathParam("code") String code,
+		@FormParam("land_in") String land,
+		@FormParam("hoofdstad_in") String hoofdstad,
+		@FormParam("regio_in") String regio,
+		@FormParam("oppervlakte_in") int oppervlakte,
+		@FormParam("inwoners_in") int inwoners) {
 
+		if(super.update(code, land, hoofdstad, regio, oppervlakte, inwoners)) {
+			return Response.ok().build();
+		} else {
+			return Response.status(400).build();
+		}
+	}
 }
 
 
