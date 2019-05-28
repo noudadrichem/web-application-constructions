@@ -27,6 +27,7 @@ function getTimePlusZone(timestamp) {
   return hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2)
 }
 
+
 function fetchWeatherData(lat, long, city) {
 	const now = new Date().getTime();
 	const isThereInStorage = window.localStorage.getItem(`weather-${city}`)
