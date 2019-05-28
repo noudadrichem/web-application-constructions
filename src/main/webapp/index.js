@@ -1,6 +1,9 @@
 'use strict'
 
 const WEATHER_API_KEY = '3d0ff603d5b7991d41b50c4095e798b8'
+const headers = {
+	'Authorization': 'Bearer ' + window.localStorage.getItem('TOK')
+}
 
 const el = node => document.querySelector(node)
 
@@ -41,7 +44,7 @@ function fetchWeatherData(lat, long, city) {
 			res(weatherData)
 		} else {
 
-	    fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${long}&appid=${WEATHER_API_KEY}&units=metric`)
+	    fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${long}&appid=${WEATHER_API_KEY}&units=metric`, { headers })
 		    .then(res => res.json())
 		    .then(weatherData => {
 	        window.localStorage.setItem(`weather-${city}`, JSON.stringify({ weatherData, updated: new Date().getTime() }))
@@ -130,7 +133,7 @@ function renderCountryDataToDom(data) {
 }
 
 function getCountryData() {
-  fetch('http://localhost:9090/webapp/restservices/countries/')
+  fetch('restservices/countries/', { headers })
     .then(res => res.json())
     .then(data => {
       renderCountryDataToDom(data)
@@ -147,8 +150,9 @@ function getCountryData() {
         
       document.querySelectorAll('.btn-remove-country')
         .forEach(btn => {
+        	
           btn.addEventListener('click', e => {
-            fetch(`http://localhost:9090/webapp/restservices/countries/delete/${e.target.dataset.code}`, { method: 'DELETE' })
+            fetch(`restservices/countries/delete/${e.target.dataset.code}`, { method: 'DELETE', headers })
               .then(stream => stream.json())
               .then(response => {
                 console.log({ response })
@@ -170,5 +174,4 @@ window.addEventListener('load', function() {
   initLocationApi()
   getCountryData()
   console.log('ja toch niet dan')
-
 })

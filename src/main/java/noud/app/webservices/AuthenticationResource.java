@@ -19,11 +19,14 @@ public class AuthenticationResource {
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	public Response authenticateUser(@FormParam("username") String username, @FormParam("password") String pass) {
 
+		System.out.println("username: " + username + " password: " + pass);
+		
 		try {
 			UserPostgresDaoImpl dao = new UserPostgresDaoImpl();
 			String role = dao.findRoleForUser(username, pass);
 			
 			if(role == null) { 
+				System.out.println("No user found.");
 				throw new IllegalArgumentException("No user found!");
 			}
 			
@@ -32,6 +35,7 @@ public class AuthenticationResource {
 			SimpleEntry<String, String> JWT = new SimpleEntry<String, String>("JWT", token);
 
 			return Response.ok(JWT).build();
+
 		} catch (JwtException | IllegalArgumentException e) {
 			return Response.status(Response.Status.UNAUTHORIZED).build();
 		}

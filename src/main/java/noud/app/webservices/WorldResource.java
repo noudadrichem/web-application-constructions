@@ -1,5 +1,6 @@
 package noud.app.webservices;
 
+import javax.annotation.security.RolesAllowed;
 import javax.json.*;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -55,6 +56,7 @@ public class WorldResource extends CountryPostgresDaoImpl {
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
+	@RolesAllowed({"user", "admin"})
 	@Path("largestsurface")
 	public String getLargestSurfaceCountries() {
 		
@@ -69,6 +71,7 @@ public class WorldResource extends CountryPostgresDaoImpl {
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
+	@RolesAllowed({"user", "admin"})
 	@Path("largestpopulations")
 	public String getLargestPopulationCountries() {
 		
@@ -82,6 +85,7 @@ public class WorldResource extends CountryPostgresDaoImpl {
 	}
 	
 	@DELETE
+	@RolesAllowed("admin")
 	@Path("/delete/{code}")
 	public String deleteCountryByCode(@PathParam("code") String code) {
 		super.delete(code);
@@ -95,6 +99,7 @@ public class WorldResource extends CountryPostgresDaoImpl {
 	
 	
 	@PUT
+	@RolesAllowed("admin")
 	@Path("/update/{code}")
 	@Produces("application/json")
 	public Response updateCountry(

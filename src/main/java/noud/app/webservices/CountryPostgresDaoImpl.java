@@ -2,6 +2,8 @@ package noud.app.webservices;
 
 import java.sql.*;
 import java.util.*;
+
+import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  
+  	
+  	<form id="loginForm">
+  		<input type="text" name="username" value="noud"/>
+  		<input type="password" name="password" value="test1234"/>
+  		<input type="button" value="login" id="login" />
+  	</form>
+  	
+  	
+  	<script>
+  		function login(e) {
+  			var formData = new FormData(document.querySelector('#loginForm'));
+  			var encData = new URLSearchParams(formData.entries());
+  			
+  			fetch('restservices/authentication', { method: 'POST', body: encData })
+  				.then(response => {
+  					console.log(response);
+  					if(response.ok) {
+  						return response.json();
+  					} else {
+  						throw "WRONG!";
+  					}
+  				})
+  				.then(json => window.localStorage.setItem("TOK", json.JWT))
+  				.catch(err => console.error({ err }))
+  			
+  			window.location.href = "prakticum5.html"
+  		}
+  		
+  		document.querySelector('#login').addEventListener('click', login);
+  	</script>
+  
+</body>
+</html>
