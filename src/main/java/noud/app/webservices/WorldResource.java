@@ -6,12 +6,12 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.servlet.http.HttpServlet.*;
- 
 
 @Path("/countries")
-public class WorldResource extends CountryPostgresDaoImpl {
+public class WorldResource {
 	
 	private WorldService resource = new WorldService();
+	private CountryDao dao = new CountryPostgresDaoImpl();
 	
 	public JsonObjectBuilder buildCountryJsonObject(Country country) {
 		
@@ -30,7 +30,6 @@ public class WorldResource extends CountryPostgresDaoImpl {
 			.add("lng", country.getLongitude());
 		
 		return singleCountry;
-		
 	}
 
 	@GET
@@ -38,7 +37,7 @@ public class WorldResource extends CountryPostgresDaoImpl {
 	public String getCountries() {
 		JsonArrayBuilder countriesArray = Json.createArrayBuilder();
 		
-		for(Country country : super.findAll()) {
+		for(Country country : dao.findAll()) {
 			countriesArray.add(buildCountryJsonObject(country));
 		}
 		
@@ -49,7 +48,7 @@ public class WorldResource extends CountryPostgresDaoImpl {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("{countryCode}")
 	public String getSingleCountry(@PathParam("countryCode") String countryCode) {
-		Country country = super.findByCode(countryCode.toUpperCase());
+		Country country = dao.findByCode(countryCode.toUpperCase());
 		
 		return buildCountryJsonObject(country).build().toString();
 	}
@@ -88,7 +87,7 @@ public class WorldResource extends CountryPostgresDaoImpl {
 	@RolesAllowed("admin")
 	@Path("/delete/{code}")
 	public String deleteCountryByCode(@PathParam("code") String code) {
-		super.delete(code);
+		dao.delete(code);
 		
 		JsonObjectBuilder messageBuilder = Json.createObjectBuilder();
 		messageBuilder
@@ -96,7 +95,29 @@ public class WorldResource extends CountryPostgresDaoImpl {
 		
 		return messageBuilder.build().toString();
 	}
-	
+
+	@POST
+	@RolesAllowed("admin")
+	@Path("/add")
+	@Produces("application/json")
+	public Response save(
+		@FormParam("code") String code,
+		@FormParam("name") String name,
+		@FormParam("capital") String capital,
+		@FormParam("continent") String continent,
+		@FormParam("region") String region
+	) {
+
+		System.out.println("code: " + code);
+		System.out.println("name: " + name);
+		System.out.println("capital: " + capital);
+
+		if(dao.save(code, name, capital, continent, region)) {
+			return Response.ok().build();
+		} else {
+			return Response.status(400).build();
+		}
+	}
 	
 	@PUT
 	@RolesAllowed("admin")
@@ -110,7 +131,7 @@ public class WorldResource extends CountryPostgresDaoImpl {
 		@FormParam("oppervlakte_in") int oppervlakte,
 		@FormParam("inwoners_in") int inwoners) {
 
-		if(super.update(code, land, hoofdstad, regio, oppervlakte, inwoners)) {
+		if(dao.update(code, land, hoofdstad, regio, oppervlakte, inwoners)) {
 			return Response.ok().build();
 		} else {
 			return Response.status(400).build();

@@ -4,7 +4,7 @@ import java.sql.SQLException;
 import java.util.*;
 
 public interface CountryDao {
-	public boolean save(Country country);
+	public boolean save(String code, String name, String capital, String continent, String region);
 	public List<Country> findAll();
 	public Country findByCode(String code);
 	public List<Country> find10LargestPopulations();

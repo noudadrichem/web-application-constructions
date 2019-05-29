@@ -18,8 +18,8 @@
   	
   	<script>
   		function login(e) {
-  			var formData = new FormData(document.querySelector('#loginForm'));
-  			var encData = new URLSearchParams(formData.entries());
+  			const formData = new FormData(document.querySelector('#loginForm'));
+  			const encData = new URLSearchParams(formData.entries());
   			
   			fetch('restservices/authentication', { method: 'POST', body: encData })
   				.then(response => {
@@ -32,8 +32,6 @@
   				})
   				.then(json => window.localStorage.setItem("TOK", json.JWT))
   				.catch(err => console.error({ err }))
-  			
-  			window.location.href = "prakticum5.html"
   		}
   		
   		document.querySelector('#login').addEventListener('click', login);

@@ -1,6 +1,6 @@
 'use strict'
 
-const WEATHER_API_KEY = '3d0ff603d5b7991d41b50c4095e798b8'
+const WEATHER_API_KEY = '742a2e3e80a51ac3c2cd1b358b7550f7'
 const headers = {
 	'Authorization': 'Bearer ' + window.localStorage.getItem('TOK')
 }
@@ -44,7 +44,7 @@ function fetchWeatherData(lat, long, city) {
 			res(weatherData)
 		} else {
 
-	    fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${long}&appid=${WEATHER_API_KEY}&units=metric`, { headers })
+	    fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${long}&appid=${WEATHER_API_KEY}&units=metric`)
 		    .then(res => res.json())
 		    .then(weatherData => {
 	        window.localStorage.setItem(`weather-${city}`, JSON.stringify({ weatherData, updated: new Date().getTime() }))
@@ -150,7 +150,6 @@ function getCountryData() {
         
       document.querySelectorAll('.btn-remove-country')
         .forEach(btn => {
-        	
           btn.addEventListener('click', e => {
             fetch(`restservices/countries/delete/${e.target.dataset.code}`, { method: 'DELETE', headers })
               .then(stream => stream.json())

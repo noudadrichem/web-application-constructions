@@ -10,12 +10,20 @@ import javax.ws.rs.core.Response;
 public class CountryPostgresDaoImpl extends PostgresBaseDao implements CountryDao {
 
 	@Override
-	public boolean save(Country country) {
+	public boolean save(String code, String name, String capital, String continent, String region) {
 		try(Connection con = super.getConnection()) {
-			String query = "";
-			ResultSet result = con.prepareStatement(query).executeQuery();
-			
-			
+			PreparedStatement prepState = con.prepareStatement("insert into country (code, name, capital, continent, region) values(?,?,?,?,?)");
+			prepState.setString(1, code);
+			prepState.setString(2, name);
+			prepState.setString(3, capital);
+			prepState.setString(4, continent);
+			prepState.setString(5, region);
+
+			ResultSet result = prepState.executeQuery();
+
+			while(result.next()) {
+				System.out.println("succes");
+			}
 			
 			return true;
 		} catch(Exception e) {

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  <form id="toevoeg-form">
+    <label>code</label>
+    <input type="text" name="code" />
+  
+    <label>name</label>
+    <input type="text" name="name" />
+  
+    <label>capital</label>
+    <input type="text" name="capital" />
+  
+    <label>continent</label>
+    <input type="text" name="continent" />
+  
+    <label>region</label>
+    <input type="text" name="region" />
+  
+    <input type="button" value="toevoegen" id="toevoegen" />
+  </form>
+
+
+  <script>
+    function add(e) {
+      const headers = {
+        'Authorization': 'Bearer ' + window.localStorage.getItem('TOK')
+      }
+      const formData = new FormData(document.querySelector('#toevoeg-form'));
+      const encData = new URLSearchParams(formData.entries());
+      console.log({ formData, encData })
+
+      fetch('restservices/countries/add', {
+          method: 'POST',
+          headers: headers,
+          body: encData,
+        })
+        .then(response => {
+          console.log(response);
+
+          if (response.ok) {
+            // return response.json();
+            // console.log(reponse)
+            return true
+          } else {
+            throw "WRONG!";
+          }
+        })
+        .then(json => { console.log({ json }) })
+        .catch(err => console.error({ err }))
+    }
+
+    document.querySelector('#toevoegen').addEventListener('click', add);
+  </script>
+</body>
+
+</html>
