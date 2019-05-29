@@ -117,7 +117,10 @@ function renderCountryDataToDom(data) {
       const { name, capital, region, surface, population, lat, lng, code } = country
       countryContainer.innerHTML += `
         <tr>
-          <td><button class="btn-remove-country" data-code="${code}">x</button></td>
+          <td>
+            <button class="btn-remove-country" data-code="${code}">x</button>
+            <button class="btn-update-country" data-code="${code}" data-country='${JSON.stringify(country)}'>UPD</button>
+          </td>
           <td class="land" data-lat="${lat}" data-lon="${lng}" data-city="${capital}">
             ${name}
           </td>
@@ -159,7 +162,57 @@ function getCountryData() {
               })
           })
         })
+
+      document.querySelectorAll('.btn-update-country')
+        .forEach(btn => {
+          btn.addEventListener('click', e => {
+            document.querySelector("#update-modal").style.display = 'flex'
+            const form = document.querySelector('#update-country-form')
+            const {
+              name,
+              capital,
+              region,
+              surface,
+              population,
+              code
+            } = JSON.parse(e.target.dataset.country);
+
+            console.log({name, code })
+
+            form.land_in.value = name;
+            form.hoofdstad_in.value = capital
+            form.regio_in.value = region
+            form.oppervlakte_in.value = surface
+            form.inwoners_in.value = population
+            form.btn.dataset.code = code
+          })
+        })
     })
+}
+
+function updateCountryFromModal() {
+  const btn = document.querySelector('#update-country')
+
+  btn.addEventListener('click', e => {
+    console.log('click update')
+
+    const form = document.querySelector('#update-country-form')
+    const formData = new FormData(form);
+    const encData = new URLSearchParams(formData.entries());
+
+    console.log('asdfasdf: ', e.target)
+    fetch(`restservices/countries/update/${e.target.dataset.code}`, { method: 'PUT', headers, body: encData, })
+      .then(response => {
+        if(response.ok) {
+          return response
+        } else {
+          throw "nee";
+        }
+      })
+      .then(response => {
+        console.log({ response })
+      })
+  })
 }
 
 function initLocationApi() {
@@ -172,5 +225,8 @@ function initLocationApi() {
 window.addEventListener('load', function() {
   initLocationApi()
   getCountryData()
+  updateCountryFromModal()
   console.log('ja toch niet dan')
+
+  document.querySelector('#close-country').onclick = e => document.querySelector("#update-modal").style.display = 'none'
 })

@@ -131,9 +131,18 @@ public class WorldResource {
 		@FormParam("oppervlakte_in") int oppervlakte,
 		@FormParam("inwoners_in") int inwoners) {
 
+			System.out.println("update: " + code);
+			System.out.println("land: " + land);
+			System.out.println("hoofdstad: " + hoofdstad);
+			System.out.println("regio: " + regio);
+			System.out.println("oppervlakte: " + oppervlakte);
+			System.out.println("inwoners: " + land);
+
 		if(dao.update(code, land, hoofdstad, regio, oppervlakte, inwoners)) {
+			System.out.println("update succesfull with code " + code);
 			return Response.ok().build();
 		} else {
+			System.out.println("update failed with code " + code);
 			return Response.status(400).build();
 		}
 	}

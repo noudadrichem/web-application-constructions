@@ -36,6 +36,8 @@
       }
       const formData = new FormData(document.querySelector('#toevoeg-form'));
       const encData = new URLSearchParams(formData.entries());
+
+      
       console.log({ formData, encData })
 
       fetch('restservices/countries/add', {
