@@ -1,5 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
@@ -89,7 +88,8 @@
 	</dependencies>
 
 	<build>
-		<pluginManagement><!-- lock down plugins versions to avoid using Maven 
+		<pluginManagement>
+			<!-- lock down plugins versions to avoid using Maven 
 				defaults (may be moved to parent pom) -->
 			<plugins>
 				<!-- clean lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#clean_Lifecycle -->
@@ -103,6 +103,59 @@
 						<port>9090</port>
 					</configuration>
 				</plugin>
+
+				<plugin>
+					<groupId>com.fizzed</groupId>
+					<artifactId>fizzed-watcher-maven-plugin</artifactId>
+					<version>1.0.4</version>
+					<configuration>
+						<files>
+							<param>src/main/java</param>
+							<param>src/main/resources</param>
+						</files>
+						<goals>
+							<param>clean</param>
+							<param>compile</param>
+						</goals>
+						<profiles>
+							<param>optional-profile-to-activate-while-running-goals</param>
+						</profiles>
+					</configuration>
+				</plugin>
+
+				<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>2.3</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>copy</goal>
+						</goals>
+						<configuration>
+							<artifactItems>
+								<artifactItem>
+									<groupId>com.github.jsimone</groupId>
+									<artifactId>webapp-runner</artifactId>
+									<version>9.0.8.0</version>
+									<destFileName>webapp-runner.jar</destFileName>
+								</artifactItem>
+								<artifactItem>
+									<groupId>org.apache.tomcat</groupId>
+									<artifactId>tomcat-dbcp</artifactId>
+									<version>9.0.8</version>
+								</artifactItem>
+								<artifactItem>
+									<groupId>org.postgresql</groupId>
+									<artifactId>postgresql</artifactId>
+									<version>42.2.2</version>
+								</artifactItem>
+							</artifactItems>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 			</plugins>
 		</pluginManagement>
 	</build>

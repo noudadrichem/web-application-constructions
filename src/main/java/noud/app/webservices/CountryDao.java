@@ -1,6 +1,6 @@
 package noud.app.webservices;
 
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.*;
 
 public interface CountryDao {
